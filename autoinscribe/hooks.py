@@ -227,3 +227,21 @@ app_license = "agpl-3.0"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+fixtures = [
+    {
+        "doctype": "Client Script",
+    },
+    {
+        "dt": "Custom Field",
+        "filters": [
+            [
+                "fieldname",
+                "in",
+                {
+                    "custom_upload_image",
+                    "custom_upload_business_card"
+                }
+            ]
+        ]
+    }
+]
