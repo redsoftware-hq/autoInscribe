@@ -82,6 +82,12 @@ To set up your local development environment, make sure that you have enabled [d
 
 <hr>
 
+## Usage
+
+For now, we support only two doctypes: Contact & Lead.
+<br>
+After installing the app and providing all the secrets/keys, simply go to the "Add" screen of the supported doctype and you'll see an "Upload" field where you can upload the business card image of your choice, make sure to click "Set all public" as we only support public files for now. Then click upload and wait for the fields to populate.
+
 ### Contributing
 
 - Send PRs to `develop` branch only.
