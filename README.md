@@ -59,3 +59,40 @@ AutoInscribe is a tool for simplifying OCR that is built using [Frappe Framework
 </details>
 
 <hr>
+
+## Installation for self-hosted users:
+
+It can be installed via [frappe-bench](https://frappeframework.com/docs/v14/user/en/bench) on your local machine or on your production site.
+
+Once you have [setup your bench](https://frappeframework.com/docs/v14/user/en/installation) and your [site](https://frappeframework.com/docs/v14/user/en/tutorial/install-and-setup-bench), you can install the app via the following commands:
+
+```bash
+# development install
+$ bench get-app https://github.com/redsoftware-hq/autoInscribe --branch develop
+
+# install on site
+$ bench --site yoursite.name install-app autoinscribe
+```
+
+Post this, you can use autoinscribe on your Frappe site by searching for AutoInscribe settings then entering your credentials and adding "vision_private_key": <your_private_key> in your site_config.json. 
+
+### Local development setup
+
+To set up your local development environment, make sure that you have enabled [developer mode](https://frappeframework.com/how-to-enable-developer-mode-in-frappe) in your Frappe site config.
+
+<hr>
+
+### Contributing
+
+- Send PRs to `develop` branch only.
+
+<hr>
+
+## Reporting Bugs
+If you find any bugs, feel free to report them here on [GitHub Issues](https://github.com/redsoftware-hq/autoInscribe/issues). Make sure you share enough information (app screenshots, browser console screenshots, stack traces, etc) for project maintainers to replicate your bug.
+
+<hr>
+
+## License
+
+AGPLv3
