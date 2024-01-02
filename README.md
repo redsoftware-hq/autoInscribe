@@ -4,7 +4,7 @@
   <p align="center">Seamless automatic data capture and integration solution</p>
 </p>
 <p align="center">
-  <a href="https://github.com/The-Commit-Company/autoinscribe/blob/main/LICENSE">
+  <a href="https://github.com/redsoftware-hq/autoInscribe/blob/develop/LICENSE.txt">
     <img alt="license" src="https://img.shields.io/badge/license-AGPLv3-blue">
   </a>
 </p>
