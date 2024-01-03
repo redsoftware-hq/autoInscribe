@@ -17,7 +17,7 @@
    "fieldname": "openai_gpt_key",
    "fieldtype": "Password",
    "in_list_view": 1,
-   "label": "OpenAI GPT Key",
+   "label": "OpenAI GPT Key (encrypted for security reasons)",
    "reqd": 1
   },
   {
@@ -47,7 +47,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-01-03 16:24:32.354396",
+ "modified": "2024-01-03 16:40:26.214014",
  "modified_by": "Administrator",
  "module": "AutoInscribe",
  "name": "AutoInscribe Settings",
