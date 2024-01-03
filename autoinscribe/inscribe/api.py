@@ -37,16 +37,19 @@ credentials = service_account.Credentials.from_service_account_info({
 
 @frappe.whitelist()
 def ask_gpt(prompt):
-    chat_completion = gpt_client.chat.completions.create(
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-            }
-        ],
-        model="gpt-3.5-turbo-1106",
-    )
-    return chat_completion.choices[0].message.content.strip()
+    try:
+        chat_completion = gpt_client.chat.completions.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                }
+            ],
+            model="gpt-3.5-turbo-1106",
+        )
+        return chat_completion.choices[0].message.content.strip()
+    except Exception as e:
+        frappe.throw("Please enter a valid OpenAI API key in AutoInscribe Settings")
 
 
 @frappe.whitelist()

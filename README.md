@@ -15,10 +15,13 @@ AutoInscribe is a tool for simplifying OCR that is built using [Frappe Framework
 
 <hr>
 
-## Pre-Requisites to be installed
+## Pre-Requisites
 
 1. [Frappe Framework](https://frappeframework.com) - v15 or above
 2. [ERPNext](https://erpnext.com/) - v14 or above
+3. [OpenAI Account](https://platform.openai.com/) - First, create an OpenAI account or sign in. Next, navigate to the API key page and "Create new secret key", optionally naming the key.
+4. [Google Vision API](https://console.cloud.google.com/marketplace/product/google/vision.googleapis.com) - Login to your Google Cloud Console and create a new project or select the existing one from under the Project tab. When the project is opened, click Navigation Menu and select “API & Services > Dashboard”. Now you need to enable Cloud Vision API. To do this, click the “ENABLE APIS AND SERVICES” button. In the search bar, search for Cloud Vision API and click it to enable. Now you need to create Google Cloud Vision key. To do this, click Navigation menu, select “IAM & admin > Service accounts”. In the window that opens, click “Create Service Account”.
+Set up the name, ID and optionally add the description. In the next step, set up a role or leave it by default and click “Continue”. In the last step, optionally grant users access to this service account and create the key. In the menu “Service accounts for project “Project Name”, click “Actions > Create key”. In the window that opens, select “JSON” as the key format and click “Create”. You will be prompted to automatically download the key.
 
 <hr>
 
