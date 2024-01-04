@@ -1,30 +1,33 @@
+'''A set of methods used to make API calls to OpenAI & Google Vision API'''
+
 import frappe
 import base64
 import requests
 from openai import OpenAI
 from google.cloud import vision
 from google.oauth2 import service_account
-from frappe.utils.password import get_decrypted_password
 
 autoinscribe_settings = frappe.get_doc("AutoInscribe Settings").as_dict()
 
 def get_openai_gpt_key():
-    return get_decrypted_password("AutoInscribe Settings", "AutoInscribe Settings", "openai_gpt_key")
+    '''Returns decrypted OpenAI API key from AutoInscribe Settings'''
+    return frappe.get_single("AutoInscribe Settings").get_password('openai_gpt_key')
 
 
 def get_vision_client_email():
+    '''Returns Vision Client Email from AutoInscribe Settings'''
     return autoinscribe_settings["vision_client_email"]
 
 
 def get_vision_project_id():
+    '''Returns Vision Project ID from AutoInscribe Settings'''
     return autoinscribe_settings["vision_project_id"]
 
 
 def get_vision_token_uri():
+    '''Returns Vision Token URI from AutoInscribe Settings'''
     return autoinscribe_settings["vision_token_uri"]
 
-
-gpt_client = OpenAI(api_key=get_openai_gpt_key())
 
 credentials = service_account.Credentials.from_service_account_info({
   "type": "service_account",
@@ -37,7 +40,9 @@ credentials = service_account.Credentials.from_service_account_info({
 
 @frappe.whitelist()
 def ask_gpt(prompt):
+    '''Returns response from OpenAI API given a prompt'''
     try:
+        gpt_client = OpenAI(api_key=get_openai_gpt_key())
         chat_completion = gpt_client.chat.completions.create(
             messages=[
                 {
@@ -54,6 +59,7 @@ def ask_gpt(prompt):
 
 @frappe.whitelist()
 def get_gpt_task(**args):
+    '''Returns task subject & description as a response from OpenAI API given task details'''
     task_details = args.get('task_details')
     prompt = f"You are an assistant that is responsible for generating the Subject and Details of the following task: {task_details}. Subject must be a string that gives an overview of the task. Details must be a formatted HTML body that describes that task."
     reply = ask_gpt(prompt)
@@ -62,6 +68,7 @@ def get_gpt_task(**args):
 
 @frappe.whitelist()
 def extract_text_from_img(img_url):
+    '''Extracts and returns first_name, middle_name, last_name, gender, salutation, designation contact_numbers, email_ids, company_name, website, address, mobile_number, phone_number, city, state and country from an image given the image URL'''
     response = requests.get(img_url)
     # Encode the image content to base64
     base64_img = base64.b64encode(response.content).decode('utf-8')
@@ -84,6 +91,7 @@ def extract_text_from_img(img_url):
 
 @frappe.whitelist()
 def create_address(address):
+    '''Given an address string, extract city, state, postal_code, country and create an address if country exists & return the inserted doc. Return False otherwise.'''
     prompt = f"From the following address text, identify city, state, country and postal_code: {address}. Output must be a string containing one key-value pair per line and for absence of values use 'NULL'. country must have the value as full country name, e.g, US becomes United States, UK becomes United Kingdom"
     reply = ask_gpt(prompt)
     addr_lines = reply.strip().splitlines()
@@ -107,3 +115,4 @@ def create_address(address):
         return doc
     else:
         return False
+

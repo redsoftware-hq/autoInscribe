@@ -11,6 +11,7 @@ function hidePasswordStrengthElements(frm) {
   $.each(frm.fields_dict, function (fieldname, field) {
     if (field.df && field.df.fieldtype === "Password") {
       field.$wrapper.find(".password-strength-indicator, .help-box").hide();
+      field.$wrapper.find(".toggle-password").hide();
     }
   });
 }
