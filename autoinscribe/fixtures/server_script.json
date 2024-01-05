@@ -1,0 +1,21 @@
+[
+ {
+  "allow_guest": 0,
+  "api_method": null,
+  "cron_format": null,
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Server Script",
+  "doctype_event": "Before Save",
+  "enable_rate_limit": 0,
+  "event_frequency": "All",
+  "modified": "2024-01-05 14:32:56.543165",
+  "module": "AutoInscribe",
+  "name": "AutoInscribe Contact Error",
+  "rate_limit_count": 5,
+  "rate_limit_seconds": 86400,
+  "reference_doctype": "Contact",
+  "script": "if doc.custom_upload_image and not doc.first_name:\n    frappe.msgprint(\"Please check your AutoInscribe Settings and try again\", title=\"Invalid AutoInscribe Settings\", indicator=\"red\")\n",
+  "script_type": "DocType Event"
+ }
+]

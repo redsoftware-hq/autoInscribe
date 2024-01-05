@@ -230,6 +230,7 @@ app_license = "agpl-3.0"
 fixtures = [
     {
         "doctype": "Client Script",
+        "doctype": "Server Script",
     },
     {
         "dt": "Custom Field",
