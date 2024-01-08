@@ -7,17 +7,16 @@
  "field_order": [
   "openai_gpt_key",
   "vision_client_email",
-  "column_break_ymha",
   "vision_project_id",
-  "vision_token_uri"
+  "vision_token_uri",
+  "vision_private_key"
  ],
  "fields": [
   {
-   "description": "Key is encrypted for security reasons",
    "fieldname": "openai_gpt_key",
    "fieldtype": "Password",
    "in_list_view": 1,
-   "label": "OpenAI GPT Key (encrypted for security reasons)",
+   "label": "OpenAI GPT Key",
    "reqd": 1
   },
   {
@@ -40,14 +39,16 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_ymha",
-   "fieldtype": "Column Break"
+   "fieldname": "vision_private_key",
+   "fieldtype": "Long Text",
+   "label": "Vision Private Key",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-01-03 16:40:26.214014",
+ "modified": "2024-01-07 18:22:32.864473",
  "modified_by": "Administrator",
  "module": "AutoInscribe",
  "name": "AutoInscribe Settings",
@@ -66,6 +67,5 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "track_changes": 1
+ "states": []
 }

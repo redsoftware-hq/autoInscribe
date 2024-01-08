@@ -34,6 +34,11 @@ class AutoInscribeIntegration(Document):
 		
 		return frappe.get_single("AutoInscribe Settings").as_dict()["vision_token_uri"]
 	
+	def get_vision_private_key(self):
+		'''Returns Vision Private Key from AutoInscribe Settings'''
+		
+		return frappe.get_single("AutoInscribe Settings").as_dict()["vision_private_key"]
+	
 	def ask_gpt(self, prompt):
 		'''Returns response from OpenAI API given a prompt'''
 		
@@ -59,7 +64,7 @@ class AutoInscribeIntegration(Document):
 			credentials = service_account.Credentials.from_service_account_info({
 				"type": "service_account",
 				"project_id": self.get_vision_project_id(),
-				"private_key": frappe.conf["vision_private_key"],
+				"private_key": self.get_vision_private_key().strip().replace('\\n', '\n'),
 				"client_email": self.get_vision_client_email(),
 				"token_uri": self.get_vision_token_uri(),
 			})
