@@ -9,8 +9,6 @@ from openai import OpenAI
 from google.cloud import vision
 from google.oauth2 import service_account
 
-# autoinscribe_settings = frappe.get_doc("AutoInscribe Settings").as_dict()
-
 class AutoInscribeIntegration(Document):
 	'''Encapsulates a set of methods used to make external calls to OpenAI API & Google Vision API'''
 
