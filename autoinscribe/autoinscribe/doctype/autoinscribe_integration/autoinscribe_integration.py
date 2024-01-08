@@ -110,6 +110,7 @@ class AutoInscribeIntegration(Document):
 					"state": state if state != "NULL" else None,
 					"country": country,
 					"pincode": postal_code if postal_code != "NULL" else None,
+					"is_your_company_address": 0
 			})
 			doc.insert()
 			return doc
