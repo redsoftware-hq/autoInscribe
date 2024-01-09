@@ -114,3 +114,15 @@ class AutoInscribeIntegration(Document):
 			return doc
 		else:
 			return None
+
+@frappe.whitelist()
+def extract_text_from_img(img_url):
+	doc = frappe.get_single("AutoInscribe Integration")
+    return doc.extract_text_from_img(img_url)
+
+
+@frappe.whitelist()
+def create_address(address):
+	doc = frappe.get_single("AutoInscribe Integration")
+    return doc.create_address(address)
+
