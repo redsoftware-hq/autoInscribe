@@ -134,6 +134,12 @@ doctype_js = {"Lead" : "public/js/lead.js", "Contact": "public/js/contact.js"}
 # 	}
 # }
 
+doc_events = {
+    "Contact": {
+		"after_insert": "autoinscribe.autoinscribe.doctype.autoinscribe_integration.autoinscribe_integration.display_contact_error_after_insert",
+	},
+}
+
 # Scheduled Tasks
 # ---------------
 
@@ -232,9 +238,6 @@ doctype_js = {"Lead" : "public/js/lead.js", "Contact": "public/js/contact.js"}
 # }
 
 fixtures = [
-    {
-        "doctype": "Server Script",
-    },
     {
         "dt": "Custom Field",
         "filters": [

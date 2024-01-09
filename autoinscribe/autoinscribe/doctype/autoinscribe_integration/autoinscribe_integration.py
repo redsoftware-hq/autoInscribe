@@ -117,12 +117,22 @@ class AutoInscribeIntegration(Document):
 
 @frappe.whitelist()
 def extract_text_from_img(img_url):
+	'''Calls extract_text_from_img method inside AutoInscribe Integration'''
+
 	doc = frappe.get_single("AutoInscribe Integration")
 	return doc.extract_text_from_img(img_url)
 
 
 @frappe.whitelist()
 def create_address(address):
+	'''Calls create_address method inside AutoInscribe Integration'''
+
 	doc = frappe.get_single("AutoInscribe Integration")
 	return doc.create_address(address)
 
+
+def display_contact_error_after_insert(contact, event):
+	'''Displays error message (if any) to user after contact insert'''
+
+	if contact.custom_upload_image and not contact.first_name:
+		frappe.msgprint("Please check your AutoInscribe Settings and try again", title="Invalid AutoInscribe Settings", indicator="red")
