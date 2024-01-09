@@ -118,11 +118,11 @@ class AutoInscribeIntegration(Document):
 @frappe.whitelist()
 def extract_text_from_img(img_url):
 	doc = frappe.get_single("AutoInscribe Integration")
-    return doc.extract_text_from_img(img_url)
+	return doc.extract_text_from_img(img_url)
 
 
 @frappe.whitelist()
 def create_address(address):
 	doc = frappe.get_single("AutoInscribe Integration")
-    return doc.create_address(address)
+	return doc.create_address(address)
 
