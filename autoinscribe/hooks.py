@@ -233,7 +233,6 @@ doctype_js = {"Lead" : "public/js/lead.js", "Contact": "public/js/contact.js"}
 
 fixtures = [
     {
-        "doctype": "Client Script",
         "doctype": "Server Script",
     },
     {
