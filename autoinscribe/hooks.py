@@ -136,7 +136,7 @@ doctype_js = {"Lead" : "public/js/lead.js", "Contact": "public/js/contact.js"}
 
 doc_events = {
     "Contact": {
-		"after_insert": "autoinscribe.autoinscribe.doctype.autoinscribe_integration.autoinscribe_integration.display_contact_error_after_insert",
+		"before_insert": "autoinscribe.autoinscribe.doctype.autoinscribe_integration.autoinscribe_integration.display_contact_error_before_insert",
 	},
 }
 

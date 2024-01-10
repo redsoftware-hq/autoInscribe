@@ -39,7 +39,7 @@ class AutoInscribeIntegration(Document):
 	
 	def ask_gpt(self, prompt):
 		'''Returns response from OpenAI API given a prompt'''
-		
+
 		try:
 			gpt_client = OpenAI(api_key=self.get_openai_gpt_key())
 			chat_completion = gpt_client.chat.completions.create(
@@ -57,6 +57,7 @@ class AutoInscribeIntegration(Document):
 
 	def extract_text_from_img(self, img_url):
 		'''Extracts and returns first_name, middle_name, last_name, gender, salutation, designation contact_numbers, email_ids, company_name, website, address, mobile_number, phone_number, city, state and country from an image given the image URL'''
+		
 		texts = None
 		project_id = self.get_vision_project_id()
 		private_key = self.get_vision_private_key().strip().replace('\\n', '\n')
@@ -149,8 +150,8 @@ def create_address(address):
 	return doc.create_address(address)
 
 
-def display_contact_error_after_insert(contact, event):
+def display_contact_error_before_insert(contact, event):
 	'''Displays error message (if any) to user after contact insert'''
 
-	if contact.custom_upload_image and not contact.first_name:
-		frappe.msgprint("Please check your AutoInscribe Settings and try again", title="Invalid AutoInscribe Settings", indicator="red")
+	if contact.custom_upload_image and (not contact.first_name and not contact.last_name):
+		contact.cancel()

@@ -1,3 +1,6 @@
+let once_refreshed = false
+let error_message = ''
+
 frappe.ui.form.on("Contact", {
   custom_upload_image(frm) {
     if (frm.selected_doc.custom_upload_image) {
@@ -82,7 +85,19 @@ frappe.ui.form.on("Contact", {
             });
           }
         },
+
+        error: function(r) {
+          console.log(r.exception.split(':')[1].trim())
+          error_message = r.exception.split(':')[1].trim()
+        }
       });
     }
   },
+
+  refresh(frm) {
+    if (error_message?.length > 0 && !once_refreshed) {
+      frappe.throw(error_message, title="Error")
+      once_refreshed = true
+    }
+  }
 });
