@@ -1,3 +1,7 @@
+$(document).on('change', 'input[type="file"]', function() {
+  $(".btn.btn-secondary.btn-sm.btn-modal-secondary").click()
+});
+
 frappe.ui.form.on("Lead", {
   custom_upload_business_card(frm) {
     if (frm.selected_doc.custom_upload_business_card) {

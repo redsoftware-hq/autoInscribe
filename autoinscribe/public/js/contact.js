@@ -1,3 +1,7 @@
+$(document).on('change', 'input[type="file"]', function() {
+  $(".btn.btn-secondary.btn-sm.btn-modal-secondary").click()
+});
+
 let once_refreshed = false
 let error_message = ''
 
