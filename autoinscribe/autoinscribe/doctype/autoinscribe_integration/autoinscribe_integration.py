@@ -57,19 +57,36 @@ class AutoInscribeIntegration(Document):
 
 	def extract_text_from_img(self, img_url):
 		'''Extracts and returns first_name, middle_name, last_name, gender, salutation, designation contact_numbers, email_ids, company_name, website, address, mobile_number, phone_number, city, state and country from an image given the image URL'''
+		texts = None
+		project_id = self.get_vision_project_id()
+		private_key = self.get_vision_private_key().strip().replace('\\n', '\n')
+		client_email = self.get_vision_client_email()
+		token_uri = self.get_vision_token_uri()
+
+		if not project_id or not private_key or not client_email or not token_uri:
+			return frappe.throw("Missing required fields in AutoInscribe Settings")
+
+		response = requests.get(img_url)
+
+		if response.status_code != 200:
+			if response.status_code == 403:
+				return frappe.throw("You don't have permission to access this file. Make sure you upload file with public access.")
+			else:
+				return frappe.throw("Failed to fetch image from URL")
 		
 		try:
 			credentials = service_account.Credentials.from_service_account_info({
 				"type": "service_account",
-				"project_id": self.get_vision_project_id(),
-				"private_key": self.get_vision_private_key().strip().replace('\\n', '\n'),
-				"client_email": self.get_vision_client_email(),
-				"token_uri": self.get_vision_token_uri(),
+				"project_id": project_id,
+				"private_key": private_key,
+				"client_email": client_email,
+				"token_uri": token_uri,
 			})
-			response = requests.get(img_url)
+
+			client = vision.ImageAnnotatorClient(credentials=credentials)
+			
 			# Encode the image content to base64
 			base64_img = base64.b64encode(response.content).decode('utf-8')
-			client = vision.ImageAnnotatorClient(credentials=credentials)
 			img_data = base64.b64decode(base64_img)
 			# Create an image object
 			image = vision.Image(content=img_data)
@@ -77,7 +94,8 @@ class AutoInscribeIntegration(Document):
 			response = client.text_detection(image=image)
 			texts = response.text_annotations
 		except Exception as e:
-			frappe.throw("Please check your AutoInscribe Settings and try again")
+			return frappe.throw("Invalid Google Vision credentials. Please check your AutoInscribe Settings and try again")
+
 		# Extracting detected text
 		if texts:
 			detected_text = texts[0].description
@@ -85,7 +103,7 @@ class AutoInscribeIntegration(Document):
 			reply = self.ask_gpt(prompt)
 			return reply
 		else:
-			return "No text detected"
+			return frappe.throw("No information extracted from image. Please try again with a different image")
 	
 	def create_address(self, address):
 		'''Given an address string, extract city, state, postal_code, country and create an address if country exists & return the inserted doc. Return None otherwise.'''
