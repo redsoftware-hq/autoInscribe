@@ -9,6 +9,8 @@ frappe.ui.form.on("Lead", {
             window.location.href.split("/app")[0] +
             frm.selected_doc.custom_upload_business_card,
         },
+        freeze: true,
+        freeze_message: "Transmuting Pixels into Insights... Hold Tight!",
         callback(res) {
           const resArr = res.message.split("\n");
 

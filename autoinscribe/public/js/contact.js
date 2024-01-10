@@ -12,6 +12,8 @@ frappe.ui.form.on("Contact", {
             window.location.href.split("/app")[0] +
             frm.selected_doc.custom_upload_image,
         },
+        freeze: true,
+        freeze_message: "Transmuting Pixels into Insights... Hold Tight!",
         callback(res) {
           const resArr = res.message.split("\n");
 
@@ -77,6 +79,7 @@ frappe.ui.form.on("Contact", {
               args: {
                 address: address,
               },
+              freeze: true,
               callback(res) {
                 if (res.message) {
                   frm.set_value("address", `${address}-Office`);
