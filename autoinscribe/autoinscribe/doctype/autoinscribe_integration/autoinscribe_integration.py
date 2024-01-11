@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 import base64
 import requests
@@ -53,7 +54,7 @@ class AutoInscribeIntegration(Document):
 			)
 			return chat_completion.choices[0].message.content.strip()
 		except Exception as e:
-			frappe.throw("Please enter a valid OpenAI API key in AutoInscribe Settings")
+			frappe.throw(_("Please enter a valid OpenAI API key in AutoInscribe Settings"), title=_("Error"))
 
 	def extract_text_from_img(self, img_url):
 		'''Extracts and returns first_name, middle_name, last_name, gender, salutation, designation contact_numbers, email_ids, company_name, website, address, mobile_number, phone_number, city, state and country from an image given the image URL'''
@@ -65,15 +66,15 @@ class AutoInscribeIntegration(Document):
 		token_uri = self.get_vision_token_uri()
 
 		if not project_id or not private_key or not client_email or not token_uri:
-			return frappe.throw("Missing required fields in AutoInscribe Settings")
+			return frappe.throw(_("Missing required fields in AutoInscribe Settings"), title=_("Error"))
 
 		response = requests.get(img_url)
 
 		if response.status_code != 200:
 			if response.status_code == 403:
-				return frappe.throw("You don't have permission to access this file. Make sure you upload file with public access.")
+				return frappe.throw(_("You don't have permission to access this file. Make sure you upload file with public access."), title=_("Error"))
 			else:
-				return frappe.throw("Failed to fetch image from URL")
+				return frappe.throw(_("Failed to fetch image from URL"), title=_("Error"))
 		
 		try:
 			credentials = service_account.Credentials.from_service_account_info({
@@ -95,7 +96,7 @@ class AutoInscribeIntegration(Document):
 			response = client.text_detection(image=image)
 			texts = response.text_annotations
 		except Exception as e:
-			return frappe.throw("Invalid Google Vision credentials. Please check your AutoInscribe Settings and try again")
+			return frappe.throw(_("Invalid Google Vision credentials. Please check your AutoInscribe Settings and try again"), title=_("Error"))
 
 		# Extracting detected text
 		if texts:
@@ -104,7 +105,7 @@ class AutoInscribeIntegration(Document):
 			reply = self.ask_gpt(prompt)
 			return reply
 		else:
-			return frappe.throw("No information extracted from image. Please try again with a different image")
+			return frappe.throw(_("No information extracted from image. Please try again with a different image"), title=_("Error"))
 	
 	def create_address(self, address):
 		'''Given an address string, extract city, state, postal_code, country and create an address if country exists & return the inserted doc. Return None otherwise.'''
@@ -149,9 +150,3 @@ def create_address(address):
 	doc = frappe.get_single("AutoInscribe Integration")
 	return doc.create_address(address)
 
-
-def display_contact_error_before_insert(contact, event):
-	'''Displays error message (if any) to user after contact insert'''
-
-	if contact.custom_upload_image and (not contact.first_name and not contact.last_name):
-		contact.cancel()
