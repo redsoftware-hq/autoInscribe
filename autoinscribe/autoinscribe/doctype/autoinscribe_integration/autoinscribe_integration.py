@@ -13,30 +13,34 @@ from google.oauth2 import service_account
 class AutoInscribeIntegration(Document):
 	'''Encapsulates a set of methods used to make external calls to OpenAI API & Google Vision API'''
 
+	def __init__(self, *args, **kwargs):
+		super(AutoInscribeIntegration, self).__init__(*args, **kwargs)
+		self.auto_inscribe_settings = frappe.get_single("AutoInscribe Settings")
+
 	def get_openai_gpt_key(self):
 		'''Returns decrypted OpenAI API key from AutoInscribe Settings'''
 		
-		return frappe.get_single("AutoInscribe Settings").get_password('openai_gpt_key')
+		return self.auto_inscribe_settings.get_password('openai_gpt_key')
 
 	def get_vision_client_email(self):
 		'''Returns Vision Client Email from AutoInscribe Settings'''
 		
-		return frappe.get_single("AutoInscribe Settings").as_dict()["vision_client_email"]
+		return self.auto_inscribe_settings.as_dict()["vision_client_email"]
 
 	def get_vision_project_id(self):
 		'''Returns Vision Project ID from AutoInscribe Settings'''
 		
-		return frappe.get_single("AutoInscribe Settings").as_dict()["vision_project_id"]
+		return self.auto_inscribe_settings.as_dict()["vision_project_id"]
 
 	def get_vision_token_uri(self):
 		'''Returns Vision Token URI from AutoInscribe Settings'''
 		
-		return frappe.get_single("AutoInscribe Settings").as_dict()["vision_token_uri"]
+		return self.auto_inscribe_settings.as_dict()["vision_token_uri"]
 	
 	def get_vision_private_key(self):
 		'''Returns Vision Private Key from AutoInscribe Settings'''
 		
-		return frappe.get_single("AutoInscribe Settings").as_dict()["vision_private_key"]
+		return self.auto_inscribe_settings.as_dict()["vision_private_key"]
 	
 	def ask_gpt(self, prompt):
 		'''Returns response from OpenAI API given a prompt'''
