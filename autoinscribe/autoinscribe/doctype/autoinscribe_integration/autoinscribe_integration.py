@@ -6,6 +6,7 @@ from frappe import _
 from frappe.model.document import Document
 import base64
 import requests
+import json
 from openai import OpenAI
 from google.cloud import vision
 from google.oauth2 import service_account
@@ -55,10 +56,15 @@ class AutoInscribeIntegration(Document):
 					}
 				],
 				model="gpt-3.5-turbo-1106",
+				response_format={ "type": "json_object" }
 			)
-			return chat_completion.choices[0].message.content.strip()
+			try:
+				json_data = json.loads(chat_completion.choices[0].message.content)
+				return json_data
+			except:
+				return frappe.throw(_("There was an error extracting text from the image. Please try again"), title=_("Error"))
 		except Exception as e:
-			frappe.throw(_("Please enter a valid OpenAI API key in AutoInscribe Settings"), title=_("Error"))
+			return frappe.throw(_("Please enter a valid OpenAI API key in AutoInscribe Settings" + str(e)), title=_("Error"))
 
 	def extract_text_from_img(self, img_url):
 		'''Extracts and returns first_name, middle_name, last_name, gender, salutation, designation contact_numbers, email_ids, company_name, website, address, mobile_number, phone_number, city, state and country from an image given the image URL'''
@@ -105,7 +111,7 @@ class AutoInscribeIntegration(Document):
 		# Extracting detected text
 		if texts:
 			detected_text = texts[0].description
-			prompt = f"From the following text, identify the first_name, middle_name, last_name, gender, salutation, designation contact_numbers, email_ids, company_name, website, address, mobile_number, phone_number, city, state, country: {detected_text}. Output must be a string containing one key-value pair per line and for absence of values use 'NULL' for value as placeholder. contact_numbers and email_ids must be comma-separated if there are multiple. Guess the salutation and gender. gender can be Male, Female, Transgender or Other. phone_number must be the telephone number whereas mobile_number must be the mobile number. country must have the value as full country name, e.g, US becomes United States, UK becomes United Kingdom."
+			prompt = f"From the following text, identify the first_name, middle_name, last_name, gender, salutation, designation contact_numbers, email_ids, company_name, website, address, mobile_number, phone_number, city, state, country: {detected_text}. Output must be a string containing one key-value pair per line and for absence of values use 'NULL' for value as placeholder. contact_numbers and email_ids must be as a list. Guess the salutation and gender. gender can be Male, Female, Transgender or Other. phone_number must be the telephone number whereas mobile_number must be the mobile number. country must have the value as full country name, e.g, US becomes United States, UK becomes United Kingdom. In ihe JSON format"
 			reply = self.ask_gpt(prompt)
 			return reply
 		else:
@@ -114,14 +120,13 @@ class AutoInscribeIntegration(Document):
 	def create_address(self, address):
 		'''Given an address string, extract city, state, postal_code, country and create an address if country exists & return the inserted doc. Return None otherwise.'''
 		
-		prompt = f"From the following address text, identify city, state, country and postal_code: {address}. Output must be a string containing one key-value pair per line and for absence of values use 'NULL'. country must have the value as full country name, e.g, US becomes United States, UK becomes United Kingdom"
-		reply = self.ask_gpt(prompt)
-		addr_lines = reply.strip().splitlines()
-		city = addr_lines[0].split(':')[1].strip()
-		state = addr_lines[1].split(':')[1].strip()
-		postal_code = addr_lines[3].split(':')[1].strip()
-		country = addr_lines[2].split(':')[1].strip()
-		country_exists = frappe.db.exists("Country", {"country_name": country})
+		prompt = f"From the following address text, identify city, state, country and postal_code: {address}. Output must be a JSON object and for absence of values use 'NULL'. country must have the value as full country name, e.g, US becomes United States, UK becomes United Kingdom"
+		addr_data = self.ask_gpt(prompt)
+		city = addr_data["city"]
+		state = addr_data["state"]
+		postal_code = addr_data["postal_code"]
+		country = addr_data["country"]
+		country_exists = frappe.db.exists("Country", {"country_name": addr_data["country"]})
 		address_title = address.strip().rsplit(',', 1)[0].strip() if len(address.strip().rsplit(',', 1)[0].strip()) < 100 else f"{city}, {country}"
 		print(address_title)
 		if country_exists:

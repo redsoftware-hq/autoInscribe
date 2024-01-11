@@ -2,6 +2,13 @@ $(document).on("change", 'input[type="file"]', function () {
   $(".btn.btn-secondary.btn-sm.btn-modal-secondary").click();
 });
 
+const mapFieldValue = (frm, response, field, json_field = null) => {
+  const value = response[json_field || field];
+  if (value !== "NULL") {
+    frm.set_value(field, value);
+  }
+};
+
 frappe.ui.form.on("Contact", {
   custom_upload_image(frm) {
     if (frm.selected_doc.custom_upload_image) {
@@ -16,20 +23,15 @@ frappe.ui.form.on("Contact", {
         freeze: true,
         freeze_message: "Transmuting Pixels into Insights... Hold Tight!",
         callback(res) {
-          const resArr = res.message.split("\n");
+          const data = res.message;
 
-          const first_name = resArr[0].split(":")[1].trim();
-          const middle_name = resArr[1].split(":")[1].trim();
-          const last_name = resArr[2].split(":")[1].trim();
-          first_name !== "NULL" && frm.set_value("first_name", first_name);
-          middle_name !== "NULL" && frm.set_value("middle_name", middle_name);
-          last_name !== "NULL" && frm.set_value("last_name", last_name);
-          const company_name = resArr[8].split(":")[1].trim();
-          company_name !== "NULL" &&
-            frm.set_value("company_name", company_name);
-          const designation = resArr[5].split(":")[1].trim();
-          designation !== "NULL" && frm.set_value("designation", designation);
-          const email_ids = resArr[7].split(":")[1].trim().split(",");
+          mapFieldValue(frm, data, "first_name");
+          mapFieldValue(frm, data, "middle_name");
+          mapFieldValue(frm, data, "last_name");
+          mapFieldValue(frm, data, "company_name");
+          mapFieldValue(frm, data, "designation");
+
+          const email_ids = data.email_ids;
           email_ids.forEach((email) => {
             email.trim() !== "NULL" &&
               frm.add_child("email_ids", {
@@ -37,7 +39,7 @@ frappe.ui.form.on("Contact", {
               });
           });
           frm.refresh_field("email_ids");
-          const contact_numbers = resArr[6].split(":")[1].trim().split(",");
+          const contact_numbers = data.contact_numbers;
           contact_numbers.forEach((phone_no) => {
             phone_no.trim() !== "NULL" &&
               frm.add_child("phone_nos", {
@@ -46,7 +48,7 @@ frappe.ui.form.on("Contact", {
           });
           frm.refresh_field("phone_nos");
 
-          let gender = resArr[3].split(":")[1].trim();
+          let gender = data.gender;
           gender = gender.charAt(0).toUpperCase() + gender.slice(1);
           frappe.db.exists("Gender", gender).then((gender_exists) => {
             if (gender_exists) {
@@ -54,7 +56,7 @@ frappe.ui.form.on("Contact", {
             }
           });
           frm.refresh_field("gender");
-          let salutation = resArr[4].split(":")[1].trim();
+          let salutation = data.salutation;
           salutation =
             salutation.charAt(0).toUpperCase() +
             salutation.slice(
@@ -72,7 +74,7 @@ frappe.ui.form.on("Contact", {
             });
           frm.refresh_field("salutation");
 
-          const address = resArr[10].split(":")[1].trim();
+          const address = data.address;
           if (address !== "NULL") {
             frappe.call({
               method:
