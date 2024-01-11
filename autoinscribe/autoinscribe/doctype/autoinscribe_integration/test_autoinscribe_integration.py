@@ -33,3 +33,17 @@ class TestAutoInscribeIntegration(FrappeTestCase):
 			key, value = item.split(':', 1)
 			result_dict[key.lower()] = value.strip()
 		self.assertEqual(result_dict['first_name'].lower(), 'alex')
+	
+	def test_extract_text_from_img_with_wrong_url(self):
+		'''Test extract_text_from_img method with a wrong image url'''
+		
+		with self.assertRaises(Exception) as context:
+			extract_text_from_img("http://example.com/nonexistent.jpg")
+		self.assertEqual("Failed to fetch image from URL", str(context.exception))
+	
+	def test_extract_text_from_img__with_no_text(self):
+		'''Test extract_text_from_img method with an image having no text'''
+
+		with self.assertRaises(Exception) as context:
+			extract_text_from_img('''https://gist.githubusercontent.com/deepak-redsoftware/91bce45c6034ab8f935017c91086dbc8/raw/6b15c7300c19ef7866202045f6d0f8c5d9b9a080/no_text.png''')
+		self.assertEqual("No information extracted from image. Please try again with a different image", str(context.exception))
