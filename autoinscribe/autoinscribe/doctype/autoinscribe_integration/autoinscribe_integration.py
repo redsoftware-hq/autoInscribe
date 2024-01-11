@@ -122,10 +122,12 @@ class AutoInscribeIntegration(Document):
 		postal_code = addr_lines[3].split(':')[1].strip()
 		country = addr_lines[2].split(':')[1].strip()
 		country_exists = frappe.db.exists("Country", {"country_name": country})
+		address_title = address.strip().rsplit(',', 1)[0].strip() if len(address.strip().rsplit(',', 1)[0].strip()) < 100 else f"{city}, {country}"
+		print(address_title)
 		if country_exists:
 			doc = frappe.get_doc({
 					"doctype": "Address",
-					"address_title": address.strip(),
+					"address_title": address_title,
 					"address_type": "Office",
 					"address_line1": address.strip(),
 					"city": city if city != "NULL" else None,
