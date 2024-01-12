@@ -77,7 +77,7 @@ $ bench get-app https://github.com/redsoftware-hq/autoInscribe --branch develop
 $ bench --site yoursite.name install-app autoinscribe
 ```
 
-Post this, you can use autoinscribe on your Frappe site by searching for AutoInscribe settings then entering your credentials and adding "vision_private_key": <your_private_key> in your site_config.json. 
+Post this, you can use autoinscribe on your Frappe site by searching for AutoInscribe settings and then entering your credentials there.
 
 ### Local development setup
 
@@ -89,7 +89,7 @@ To set up your local development environment, make sure that you have enabled [d
 
 For now, we support only two doctypes: Contact & Lead.
 <br>
-After installing the app and providing all the secrets/keys, simply go to the "Add" screen of the supported doctype and you'll see an "Upload" field where you can upload the business card image of your choice, make sure to click "Set all public" as we only support public files for now. Then click upload and wait for the fields to populate.
+After installing the app and providing all the secrets/keys, simply go to the "Add" screen of the supported doctype and you'll see an "Upload" field where you can upload the business card image of your choice, leave the default option to "Set all public" as we only support public files for now. Then click upload and wait for the fields to populate.
 
 ### Contributing
 
