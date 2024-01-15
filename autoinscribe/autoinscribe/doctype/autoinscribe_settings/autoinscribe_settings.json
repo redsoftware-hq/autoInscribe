@@ -7,8 +7,10 @@
  "field_order": [
   "openai_gpt_key",
   "vision_client_email",
+  "column_break_svgj",
   "vision_project_id",
   "vision_token_uri",
+  "section_break_wsyq",
   "vision_private_key"
  ],
  "fields": [
@@ -43,12 +45,20 @@
    "fieldtype": "Long Text",
    "label": "Vision Private Key",
    "reqd": 1
+  },
+  {
+   "fieldname": "column_break_svgj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_wsyq",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2024-01-07 18:22:32.864473",
+ "modified": "2024-01-15 11:17:59.231848",
  "modified_by": "Administrator",
  "module": "AutoInscribe",
  "name": "AutoInscribe Settings",
